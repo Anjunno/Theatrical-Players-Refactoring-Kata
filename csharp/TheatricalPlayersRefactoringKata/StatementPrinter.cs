@@ -4,9 +4,11 @@ using System.Globalization;
 
 namespace TheatricalPlayersRefactoringKata;
 
-public class StatementPrinter
+public class StatementPrinter(Dictionary<string, Play> plays)
 {
-    public string Print(Invoice invoice, Dictionary<string, Play> plays)
+    private readonly Dictionary<string, Play> _plays = plays;
+    
+    public string Print(Invoice invoice)
     {
         var totalAmount = 0;
         var volumeCredits = 0;
@@ -15,7 +17,7 @@ public class StatementPrinter
 
         foreach(var perf in invoice.Performances) 
         {
-            var play = plays[perf.PlayID];
+            var play = _plays[perf.PlayID];
             var thisAmount = 0;
             switch (play.Type) 
             {
