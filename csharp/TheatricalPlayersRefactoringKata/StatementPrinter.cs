@@ -10,8 +10,8 @@ public class StatementPrinter
     {
         var totalAmount = 0;
         var volumeCredits = 0;
-        var result = string.Format("Statement for {0}\n", invoice.Customer);
-        CultureInfo cultureInfo = new CultureInfo("en-US");
+        var result = $"Statement for {invoice.Customer}\n";
+        CultureInfo cultureInfo = new("en-US");
 
         foreach(var perf in invoice.Performances) 
         {
@@ -41,11 +41,11 @@ public class StatementPrinter
             if ("comedy" == play.Type) volumeCredits += (int)Math.Floor((decimal)perf.Audience / 5);
 
             // print line for this order
-            result += String.Format(cultureInfo, "  {0}: {1:C} ({2} seats)\n", play.Name, thisAmount / 100m, perf.Audience);
+            result +=$"  {play.Name}: {(thisAmount / 100m).ToString("C", cultureInfo)} ({perf.Audience} seats)\n";
             totalAmount += thisAmount;
         }
-        result += String.Format(cultureInfo, "Amount owed is {0:C}\n", totalAmount / 100m);
-        result += String.Format("You earned {0} credits\n", volumeCredits);
+        result += $"Amount owed is {(totalAmount / 100m).ToString("C", cultureInfo)}\n";
+        result += $"You earned {volumeCredits} credits\n";
         return result;
     }
 }
