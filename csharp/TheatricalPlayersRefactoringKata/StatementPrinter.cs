@@ -40,7 +40,7 @@ public class StatementPrinter(Dictionary<string, Play> plays)
             // add volume credits
             volumeCredits += Math.Max(perf.Audience - 30, 0);
             // add extra credit for every ten comedy attendees
-            if ("comedy" == play.Type) volumeCredits += (int)Math.Floor((decimal)perf.Audience / 5);
+            if ("comedy" == play.Type) volumeCredits += perf.Audience / 5;;
 
             // print line for this order
             result +=$"  {play.Name}: {(thisAmount / 100m).ToString("C", cultureInfo)} ({perf.Audience} seats)\n";
