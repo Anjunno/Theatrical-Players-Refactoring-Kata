@@ -17,10 +17,7 @@ public class StatementPrinter {
         NumberFormat frmt = NumberFormat.getCurrencyInstance(Locale.US);
 
         for (var perf : invoice.performances) {
-            // add volume credits
-            volumeCredits += Math.max(perf.audience - 30, 0);
-            // add extra credit for every ten comedy attendees
-            if ("comedy".equals(playFor(perf).type)) volumeCredits += Math.floor(perf.audience / 5);
+            volumeCredits += volumeCreditsFor(perf);
 
             // print line for this order
             result += String.format("  %s: %s (%s seats)%n", playFor(perf).name, frmt.format(amountFor(perf) / 100), perf.audience);
@@ -56,5 +53,12 @@ public class StatementPrinter {
 
     private Play playFor(Performance aPerformance) {
         return  plays.get(aPerformance.playID);
+    }
+
+    private int volumeCreditsFor(Performance aPerformance) {
+        int result = 0;
+        result += Math.max(aPerformance.audience - 30, 0);
+        if ("comedy".equals(playFor(aPerformance).type)) result += Math.floor(aPerformance.audience / 5);
+        return  result;
     }
 }
