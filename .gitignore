@@ -2,4 +2,7 @@
 *.iml
 **/build
 **/.gradle
+**/out
+**/target
+**/bin
 .DS_Store
