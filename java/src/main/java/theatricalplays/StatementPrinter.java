@@ -17,8 +17,7 @@ public class StatementPrinter {
         NumberFormat frmt = NumberFormat.getCurrencyInstance(Locale.US);
 
         for (var perf : invoice.performances) {
-            var thisAmount = amountFor(perf, playFor(perf));
-
+            var thisAmount = amountFor(perf);
             // add volume credits
             volumeCredits += Math.max(perf.audience - 30, 0);
             // add extra credit for every ten comedy attendees
@@ -33,10 +32,10 @@ public class StatementPrinter {
         return result;
     }
 
-    private int amountFor(Performance aPerformance, Play play) {
+    private int amountFor(Performance aPerformance) {
         int result = 0;
 
-        switch (play.type) {
+        switch (playFor(aPerformance).type) {
             case "tragedy":
                 result = 40000;
                 if (aPerformance.audience > 30) {
@@ -51,7 +50,7 @@ public class StatementPrinter {
                 result += 300 * aPerformance.audience;
                 break;
             default:
-                throw new Error("unknown type: %s".formatted(play.type));
+                throw new Error("unknown type: %s".formatted(playFor(aPerformance).type));
         }
         return result;
     }
