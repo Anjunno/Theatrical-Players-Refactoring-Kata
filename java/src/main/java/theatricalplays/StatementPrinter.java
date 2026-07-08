@@ -8,17 +8,23 @@ import java.util.Map;
 public class StatementPrinter {
 
     private Map<String, Play> plays;
+    record StatementData(String customer, List<Performance> performances) {}
 
     public String print(Invoice invoice, Map<String, Play> plays) {
-        this.plays = plays;
-        var result = String.format("Statement for %s%n", invoice.customer);
 
-        for (var perf : invoice.performances) {
+        return renderPlainText(new StatementData(invoice.customer, invoice.performances), plays);
+    }
+    
+    private String renderPlainText(StatementData statementData, Map<String, Play> plays) {
+        this.plays = plays;
+        var result = String.format("Statement for %s%n", statementData.customer());
+
+        for (var perf : statementData.performances()) {
             result += String.format("  %s: %s (%s seats)%n", playFor(perf).name, usd(amountFor(perf)), perf.audience);
         }
 
-        result += String.format("Amount owed is %s%n", usd(totalAmount(invoice.performances)));
-        result += String.format("You earned %s credits%n", totalVolumeCredits(invoice.performances));
+        result += String.format("Amount owed is %s%n", usd(totalAmount(statementData.performances())));
+        result += String.format("You earned %s credits%n", totalVolumeCredits(statementData.performances()));
         return result;
     }
 
