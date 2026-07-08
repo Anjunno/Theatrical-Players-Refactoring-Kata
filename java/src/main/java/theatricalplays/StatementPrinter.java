@@ -11,16 +11,13 @@ public class StatementPrinter {
 
     public String print(Invoice invoice, Map<String, Play> plays) {
         this.plays = plays;
-        var totalAmount = 0;
         var result = String.format("Statement for %s%n", invoice.customer);
 
         for (var perf : invoice.performances) {
-            // print line for this order
             result += String.format("  %s: %s (%s seats)%n", playFor(perf).name, usd(amountFor(perf)), perf.audience);
-            totalAmount += amountFor(perf);
         }
 
-        result += String.format("Amount owed is %s%n", usd(totalAmount));
+        result += String.format("Amount owed is %s%n", usd(totalAmount(invoice.performances)));
         result += String.format("You earned %s credits%n", totalVolumeCredits(invoice.performances));
         return result;
     }
@@ -64,10 +61,18 @@ public class StatementPrinter {
     }
 
     private int totalVolumeCredits(List<Performance> performances) {
-        var volumeCredits = 0;
+        var result = 0;
         for (var perf : performances) {
-            volumeCredits += volumeCreditsFor(perf);
+            result += volumeCreditsFor(perf);
         }
-        return volumeCredits;
+        return result;
+    }
+
+    private int totalAmount(List<Performance> performances) {
+        int result = 0;
+        for(Performance p : performances) {
+            result += amountFor(p);
+        }
+        return result;
     }
 }
